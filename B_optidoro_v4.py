@@ -441,9 +441,9 @@ if st.session_state.form_on: #triggers when timer is up
             st.header("Break time!")
             # ts = break_time_minutes * 60
             if st.session_state['cycle_counter'] == 4:
-                ts = 1800
+                ts = 1800 * st.session_state['multiplier']
             else:    
-                ts = 300
+                ts = 300 * st.session_state['multiplier']
 
             with st.empty():
                 while ts:
@@ -509,5 +509,9 @@ if dev_mode == False:
 
 if st.session_state['minutes_today'] >= 100:
     st.write("You have completed the study! Congratulations! Submit your scores if you haven't, and enjoy the remainder of your break!")
+    st.write("Complete the post-study survey here to finish the session:")
+    link = '[Here](https://forms.gle/dY5VJVyzKEVWMV1w9)'
+    st.markdown(link, unsafe_allow_html=True)
+
 
 
