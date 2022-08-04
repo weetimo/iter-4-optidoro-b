@@ -187,7 +187,7 @@ if 'form_on' not in st.session_state:
     st.session_state.form_on = False
 
 if 'dev_mode' not in st.session_state:
-    st.session_state.dev_mode = True
+    st.session_state.dev_mode = False
 
 if 'cycle_counter' not in st.session_state: 
     st.session_state['cycle_counter'] = 0
