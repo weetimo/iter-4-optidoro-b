@@ -271,11 +271,6 @@ def combined_count_down(ts):
             time.sleep(float(st.session_state['multiplier']))
             ts -= 1
             st.session_state['countdown_time'] -= 1
-
-        # if st.session_state['autopilot_work'] == True:
-        #     st.session_state['autopilot_work'] = False
-        #     st.session_state['minutes_today'] = 100
-        #     st.experimental_rerun()
         
         st.session_state.run_finished = True
 
@@ -374,7 +369,7 @@ if (st.button("Begin work cycle", on_click=begin_callback, disabled=st.session_s
 
     if not st.session_state.cancel_clicked:
         st.session_state['extend'] = False
-        #st.session_state['disable_begin'] = True
+        st.session_state['disable_begin'] = True
         combined_count_down(st.session_state['countdown_time'])
         
 
@@ -382,8 +377,8 @@ if st.session_state.cancel_clicked:
     st.session_state.cancel_clicked = False
     st.experimental_rerun()
 
-if not st.session_state['disable_begin']:
-    st.session_state['disable_begin'] = False
+# if not st.session_state['disable_begin']:
+#     st.session_state['disable_begin'] = False
 
 
     
@@ -403,6 +398,7 @@ if st.session_state.form_on: #triggers when timer is up
             st.session_state['daily_focus_score'] += focus_score
             st.session_state['daily_effort_score'] += effort_score
             st.session_state.form_on = False
+            st.session_state['disable_begin'] = True
             now = datetime.now()
             opt = {'Timestamp': now, 'User': st.session_state['user'], 'session_type': st.session_state['session_type'], 
                     'Effort': effort_score, 'Fatigue': focus_score, 'minutes_today': st.session_state['minutes_today'], 
@@ -438,12 +434,12 @@ if st.session_state.form_on: #triggers when timer is up
             time.sleep(2)
             # st.experimental_rerun()
 
-            st.header("Break time!")
+            st.header("Break time! Click on 'Begin work cycle' to start your next work cycle.")
             # ts = break_time_minutes * 60
             if st.session_state['cycle_counter'] == 4:
-                ts = 1800 * st.session_state['multiplier']
+                ts = 1800
             else:    
-                ts = 300 * st.session_state['multiplier']
+                ts = 300
 
             with st.empty():
                 while ts:
@@ -492,20 +488,14 @@ st.metric("Minutes today", st.session_state['minutes_today'])
 # if st.session_state.dev_mode == False:
 #     st.session_state['multiplier'] = 1
 
-dev_mode = st.checkbox('dev mode', value=st.session_state.dev_mode)
+st.session_state.dev_mode = st.checkbox('dev mode', value=False)
 st.caption("Makes timer run faster for testing purposes.")
 
-if dev_mode == True:
-    st.session_state.dev_mode == True
+if st.session_state.dev_mode == True:
     st.session_state['multiplier'] = 0.005
-    #display CSV file
-    # df = pd.read_csv(st.session_state.csv_filepath)
-    # st.write(df)
-    # st.write(st.experimental_user)    
 
-if dev_mode == False:
+if st.session_state.dev_mode == False:
     st.session_state['multiplier'] = 1
-    st.session_state.dev_mode == False
 
 if st.session_state['minutes_today'] >= 100:
     st.write("You have completed the study! Congratulations! Submit your scores if you haven't, and enjoy the remainder of your break!")
